@@ -22,14 +22,17 @@ export class FollowService implements Service
             // TODO: Replace with the result of calling server
             return await this.getFakeData(userAlias, pageSize, lastItem);
     };
+
     public async getIsFollowerStatus (
-        authToken: AuthToken,
-        user: User,
-        selectedUser: User,
+        authToken: string,
+        user: string,
+        selectedUser: String,
     ): Promise<boolean> {
         // TODO: Replace with the result of calling server
+        //unsure what to do here
         return FakeData.instance.isFollower();
     };
+    
     public async getFolloweeCount (
         authToken: AuthToken,
         user: User,
@@ -73,6 +76,7 @@ export class FollowService implements Service
 
         return [followerCount, followeeCount];
     };
+
 
     private async getFakeData(userAlias: string, pageSize: number, lastItem: UserDTO | null): Promise<[UserDTO[], boolean]> {
         const [users, hasMore] = await FakeData.instance.getPageOfUsers(User.fromDTO(lastItem), pageSize, userAlias);

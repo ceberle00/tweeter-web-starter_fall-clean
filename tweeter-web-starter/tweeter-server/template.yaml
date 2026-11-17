@@ -120,7 +120,7 @@ Resources:
                 responses: *commonAmazonResponses
               responses: *commonSwaggerResponses
 
-          /user/create:  ##### TODO: Set endpoint URL
+          /follower:  ##### TODO: Change "/user/get" to the actual endpoint URL
             post:
               consumes: *commonConsumes
               produces: *commonProduces
@@ -128,8 +128,9 @@ Resources:
                 type: aws
                 httpMethod: POST
                 uri:
-                  ##### TODO: Set function name
-                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${userCreateFunction.Arn}/invocations
+                  ##### TODO: Change "userGetFunction" to the actual function name. (Don't delete the $, {}, or .Arn suffix.)
+                  ##### The function name must agree with the "Web API Lambda functions" section below.
+                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${getFollowersFunction.Arn}/invocations
                 requestTemplates: *commonRequestTemplates
                 responses: *commonAmazonResponses
               responses: *commonSwaggerResponses
@@ -175,7 +176,7 @@ Resources:
       ##### TODO: Change "userGetFunction" to the actual function name.
       FunctionName: getFolloweesFunction
       ##### TODO: Modify Handler property to match your code. This identifies the exact function that the lambda should run.
-      Handler: lambda/follow/GetFolloweesLambda.GetFolloweesLambda
+      Handler: lambda/follow/GetFolloweesLambda.handler
       Policies: *commonPolicies
       Events:
         PostApi:
@@ -187,19 +188,24 @@ Resources:
             Path: /followee
             Method: POST
 
-  userCreateFunction:  ##### TODO: Set function name
+  getFollowersFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: userCreateFunction  ##### TODO: Set function name
-      Handler: handlers/users/UserCreateHandler.userCreateHandler  ##### TODO: Set Handler
+      ##### TODO: Change "userGetFunction" to the actual function name.
+      FunctionName: getFollowersFunction
+      ##### TODO: Modify Handler property to match your code. This identifies the exact function that the lambda should run.
+      Handler: lambda/follow/GetFollowersLambda.handler
       Policies: *commonPolicies
       Events:
         PostApi:
           Type: Api
           Properties:
             RestApiId: !Ref tweeterApi
-            Path: /user/create  ##### TODO: Set Path
+            ##### TODO: Modify the Path property to the actual endpoint URL.
+            ##### It must match the URL in the "Endpoint definitions" section above.
+            Path: /follower
             Method: POST
+
 
   #
   # TODO: ADD MORE WEB API LAMBDA DEFINITIONS HERE

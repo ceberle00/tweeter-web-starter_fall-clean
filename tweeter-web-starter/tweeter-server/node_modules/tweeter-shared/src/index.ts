@@ -13,6 +13,8 @@ export type { UserDTO } from "./model/dto/UserDTO";
 
 //Requests
 export type { PagedUserItemRequest } from "./model/net/request/PagedUserItemRequest";
+export type { CheckIfFollowRequest } from "./model/net/request/CheckIfFollowRequest";
 
 //Responses
 export type { PagedUserItemResponse } from "./model/net/response/PagedUserItemResponse";
+export type { CheckIfFollowResponse } from "./model/net/response/CheckIfFollowResponse";
