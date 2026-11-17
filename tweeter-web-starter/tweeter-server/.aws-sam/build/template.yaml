@@ -88,7 +88,7 @@ Resources:
               Access-Control-Allow-Origin:
                 type: string
         paths:
-          /user/get:
+          /followee:
             post:
               consumes:
               - application/json
@@ -98,7 +98,7 @@ Resources:
                 type: aws
                 httpMethod: POST
                 uri:
-                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${userGetFunction.Arn}/invocations
+                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${getFolloweesFunction.Arn}/invocations
                 requestTemplates:
                   application/json: $input.json('$')
                 responses:
@@ -217,11 +217,11 @@ Resources:
       CompatibleRuntimes:
       - nodejs20.x
       RetentionPolicy: DELETE
-  userGetFunction:
+  getFolloweesFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: userGetFunction
-      Handler: handlers/users/UserGetHandler.userGetHandler
+      FunctionName: getFolloweesFunction
+      Handler: lambda/follow/GetFolloweesLambda.GetFolloweesLambda
       Policies:
       - AWSLambdaBasicExecutionRole
       - AmazonSESFullAccess
@@ -235,11 +235,11 @@ Resources:
           Properties:
             RestApiId:
               Ref: tweeterApi
-            Path: /user/get
+            Path: /followee
             Method: POST
-      CodeUri: userGetFunction
+      CodeUri: getFolloweesFunction
     Metadata:
-      SamResourceId: userGetFunction
+      SamResourceId: getFolloweesFunction
   userCreateFunction:
     Type: AWS::Serverless::Function
     Properties:

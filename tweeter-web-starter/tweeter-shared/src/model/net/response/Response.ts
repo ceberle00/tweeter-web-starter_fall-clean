@@ -1,4 +1,4 @@
 export interface Response {
     readonly success: boolean,
-    readonly message: string
+    readonly message: string | null
 }
