@@ -12,7 +12,6 @@ export class FollowService implements Service
         // TODO: Replace with the result of calling server
         return await this.getFakeData(userAlias, pageSize, lastItem);
     };
-
     public async loadMoreFollowers (
             token: string,
             userAlias: string,
@@ -34,19 +33,20 @@ export class FollowService implements Service
     };
 
     public async getFolloweeCount (
-        authToken: AuthToken,
-        user: User,
+        authToken: string,
+        user: string,
     ): Promise<number> {
         // TODO: Replace with the result of calling server
-        return FakeData.instance.getFolloweeCount(user.alias);
+        return FakeData.instance.getFolloweeCount(user);
     };
     public async getFollowerCount (
-        authToken: AuthToken,
-        user: User,
+        authToken: string,
+        user: string,
     ): Promise<number> {
         // TODO: Replace with the result of calling server
-        return FakeData.instance.getFollowerCount(user.alias);
+        return FakeData.instance.getFollowerCount(user);
     };
+    
     public async follow (
         authToken: AuthToken,
         userToFollow: User,

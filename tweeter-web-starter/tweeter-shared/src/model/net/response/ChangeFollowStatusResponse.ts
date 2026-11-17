@@ -1,6 +1,6 @@
 import { Response } from "./Response";
 
-export interface FollowCountResponse extends Response //follow and unfollow response
+export interface ChangeFollowStatusResponse extends Response
 {
     readonly followerCount: number,
     readonly followeeCount: number
