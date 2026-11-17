@@ -30,9 +30,9 @@ export class FollowService implements Service
     ): Promise<boolean> {
         // TODO: Replace with the result of calling server
         //unsure what to do here
-        return FakeData.instance.isFollower();
+        return FakeData.instance.isFollower(); //left? maybe need to change? girl idk
     };
-    
+
     public async getFolloweeCount (
         authToken: AuthToken,
         user: User,
