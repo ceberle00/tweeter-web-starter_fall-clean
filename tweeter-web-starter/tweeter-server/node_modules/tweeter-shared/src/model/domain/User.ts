@@ -88,10 +88,10 @@ export class User {
         imageUrl : this.imageUrl
     }
   }
-    public static fromDTO(dto : UserDTO | null): User | null {
-        if (dto === null) {
-            return null;
-        }
-        return new User(dto.firstName, dto.lastName, dto.alias, dto.imageUrl);
-    }
+  public static fromDTO(dto : UserDTO | null): User | null {
+      if (dto === null) {
+          return null;
+      }
+      return new User(dto.firstName, dto.lastName, dto.alias, dto.imageUrl);
+  }
 }

@@ -10,6 +10,7 @@ export { FakeData } from "./util/FakeData";
 
 //DTOs
 export type { UserDTO } from "./model/dto/UserDTO";
+export type { StatusDTO } from "./model/dto/StatusDTO";
 
 //Requests
 export type { PagedUserItemRequest } from "./model/net/request/PagedUserItemRequest";
