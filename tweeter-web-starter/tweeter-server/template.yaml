@@ -207,6 +207,104 @@ Resources:
                 requestTemplates: *commonRequestTemplates
                 responses: *commonAmazonResponses
               responses: *commonSwaggerResponses
+          /getFeedItems:  ##### TODO: Change "/user/get" to the actual endpoint URL
+            post:
+              consumes: *commonConsumes
+              produces: *commonProduces
+              x-amazon-apigateway-integration:
+                type: aws
+                httpMethod: POST
+                uri:
+                  ##### TODO: Change "userGetFunction" to the actual function name. (Don't delete the $, {}, or .Arn suffix.)
+                  ##### The function name must agree with the "Web API Lambda functions" section below.
+                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${getFeedItemsFunction.Arn}/invocations
+                requestTemplates: *commonRequestTemplates
+                responses: *commonAmazonResponses
+              responses: *commonSwaggerResponses
+          /getStoryItems:  ##### TODO: Change "/user/get" to the actual endpoint URL
+            post:
+              consumes: *commonConsumes
+              produces: *commonProduces
+              x-amazon-apigateway-integration:
+                type: aws
+                httpMethod: POST
+                uri:
+                  ##### TODO: Change "userGetFunction" to the actual function name. (Don't delete the $, {}, or .Arn suffix.)
+                  ##### The function name must agree with the "Web API Lambda functions" section below.
+                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${getStoryItemsFunction.Arn}/invocations
+                requestTemplates: *commonRequestTemplates
+                responses: *commonAmazonResponses
+              responses: *commonSwaggerResponses
+          /postStatus:  ##### TODO: Change "/user/get" to the actual endpoint URL
+            post:
+              consumes: *commonConsumes
+              produces: *commonProduces
+              x-amazon-apigateway-integration:
+                type: aws
+                httpMethod: POST
+                uri:
+                  ##### TODO: Change "userGetFunction" to the actual function name. (Don't delete the $, {}, or .Arn suffix.)
+                  ##### The function name must agree with the "Web API Lambda functions" section below.
+                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${postStatusFunction.Arn}/invocations
+                requestTemplates: *commonRequestTemplates
+                responses: *commonAmazonResponses
+              responses: *commonSwaggerResponses
+          /getUser:  ##### TODO: Change "/user/get" to the actual endpoint URL
+            post:
+              consumes: *commonConsumes
+              produces: *commonProduces
+              x-amazon-apigateway-integration:
+                type: aws
+                httpMethod: POST
+                uri:
+                  ##### TODO: Change "userGetFunction" to the actual function name. (Don't delete the $, {}, or .Arn suffix.)
+                  ##### The function name must agree with the "Web API Lambda functions" section below.
+                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${getUserFunction.Arn}/invocations
+                requestTemplates: *commonRequestTemplates
+                responses: *commonAmazonResponses
+              responses: *commonSwaggerResponses
+          /login:  ##### TODO: Change "/user/get" to the actual endpoint URL
+            post:
+              consumes: *commonConsumes
+              produces: *commonProduces
+              x-amazon-apigateway-integration:
+                type: aws
+                httpMethod: POST
+                uri:
+                  ##### TODO: Change "userGetFunction" to the actual function name. (Don't delete the $, {}, or .Arn suffix.)
+                  ##### The function name must agree with the "Web API Lambda functions" section below.
+                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${loginFunction.Arn}/invocations
+                requestTemplates: *commonRequestTemplates
+                responses: *commonAmazonResponses
+              responses: *commonSwaggerResponses
+          /register:  ##### TODO: Change "/user/get" to the actual endpoint URL
+            post:
+              consumes: *commonConsumes
+              produces: *commonProduces
+              x-amazon-apigateway-integration:
+                type: aws
+                httpMethod: POST
+                uri:
+                  ##### TODO: Change "userGetFunction" to the actual function name. (Don't delete the $, {}, or .Arn suffix.)
+                  ##### The function name must agree with the "Web API Lambda functions" section below.
+                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${registerFunction.Arn}/invocations
+                requestTemplates: *commonRequestTemplates
+                responses: *commonAmazonResponses
+              responses: *commonSwaggerResponses
+          /logout:  ##### TODO: Change "/user/get" to the actual endpoint URL
+            post:
+              consumes: *commonConsumes
+              produces: *commonProduces
+              x-amazon-apigateway-integration:
+                type: aws
+                httpMethod: POST
+                uri:
+                  ##### TODO: Change "userGetFunction" to the actual function name. (Don't delete the $, {}, or .Arn suffix.)
+                  ##### The function name must agree with the "Web API Lambda functions" section below.
+                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${logoutFunction.Arn}/invocations
+                requestTemplates: *commonRequestTemplates
+                responses: *commonAmazonResponses
+              responses: *commonSwaggerResponses
   #
   # SQS Queues  (This will become relevant in Milestone 4. For M3, leave this section commented out.)
   #
@@ -355,6 +453,125 @@ Resources:
             ##### TODO: Modify the Path property to the actual endpoint URL.
             ##### It must match the URL in the "Endpoint definitions" section above.
             Path: /follow/status
+            Method: POST
+  getFeedItemsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      ##### TODO: Change "userGetFunction" to the actual function name.
+      FunctionName: getFeedItemsFunction
+      ##### TODO: Modify Handler property to match your code. This identifies the exact function that the lambda should run.
+      Handler: lambda/feed/GetFeedItemsLambda.handler
+      Policies: *commonPolicies
+      Events:
+        PostApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref tweeterApi
+            ##### TODO: Modify the Path property to the actual endpoint URL.
+            ##### It must match the URL in the "Endpoint definitions" section above.
+            Path: /feed
+            Method: POST
+  getStoryItemsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      ##### TODO: Change "userGetFunction" to the actual function name.
+      FunctionName: getStoryItemsFunction
+      ##### TODO: Modify Handler property to match your code. This identifies the exact function that the lambda should run.
+      Handler: lambda/feed/GetStoryItemsLambda.handler
+      Policies: *commonPolicies
+      Events:
+        PostApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref tweeterApi
+            ##### TODO: Modify the Path property to the actual endpoint URL.
+            ##### It must match the URL in the "Endpoint definitions" section above.
+            Path: /story
+            Method: POST
+  postStatusFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      ##### TODO: Change "userGetFunction" to the actual function name.
+      FunctionName: postStatusFunction
+      ##### TODO: Modify Handler property to match your code. This identifies the exact function that the lambda should run.
+      Handler: lambda/feed/PostStatusLambda.handler
+      Policies: *commonPolicies
+      Events:
+        PostApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref tweeterApi
+            ##### TODO: Modify the Path property to the actual endpoint URL.
+            ##### It must match the URL in the "Endpoint definitions" section above.
+            Path: /status
+            Method: POST
+  getUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      ##### TODO: Change "userGetFunction" to the actual function name.
+      FunctionName: getUserFunction
+      ##### TODO: Modify Handler property to match your code. This identifies the exact function that the lambda should run.
+      Handler: lambda/feed/GetUserLambda.handler
+      Policies: *commonPolicies
+      Events:
+        PostApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref tweeterApi
+            ##### TODO: Modify the Path property to the actual endpoint URL.
+            ##### It must match the URL in the "Endpoint definitions" section above.
+            Path: /user
+            Method: POST
+  loginFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      ##### TODO: Change "userGetFunction" to the actual function name.
+      FunctionName: loginFunction
+      ##### TODO: Modify Handler property to match your code. This identifies the exact function that the lambda should run.
+      Handler: lambda/feed/LoginLambda.handler
+      Policies: *commonPolicies
+      Events:
+        PostApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref tweeterApi
+            ##### TODO: Modify the Path property to the actual endpoint URL.
+            ##### It must match the URL in the "Endpoint definitions" section above.
+            Path: /login
+            Method: POST
+  registerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      ##### TODO: Change "userGetFunction" to the actual function name.
+      FunctionName: registerFunction
+      ##### TODO: Modify Handler property to match your code. This identifies the exact function that the lambda should run.
+      Handler: lambda/feed/RegisterLambda.handler
+      Policies: *commonPolicies
+      Events:
+        PostApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref tweeterApi
+            ##### TODO: Modify the Path property to the actual endpoint URL.
+            ##### It must match the URL in the "Endpoint definitions" section above.
+            Path: /register
+            Method: POST
+  logoutFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      ##### TODO: Change "userGetFunction" to the actual function name.
+      FunctionName: logoutFunction
+      ##### TODO: Modify Handler property to match your code. This identifies the exact function that the lambda should run.
+      Handler: lambda/feed/LogoutLambda.handler
+      Policies: *commonPolicies
+      Events:
+        PostApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref tweeterApi
+            ##### TODO: Modify the Path property to the actual endpoint URL.
+            ##### It must match the URL in the "Endpoint definitions" section above.
+            Path: /logout
             Method: POST
   #
   # TODO: ADD MORE WEB API LAMBDA DEFINITIONS HERE

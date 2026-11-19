@@ -1,5 +1,5 @@
-import { Response } from "./Response";
+import { TweeterResponse } from "./TweeterResponse";
 
-export interface CheckIfFollowResponse extends Response {
+export interface CheckIfFollowResponse extends TweeterResponse {
     readonly isFollowing: boolean,
 }

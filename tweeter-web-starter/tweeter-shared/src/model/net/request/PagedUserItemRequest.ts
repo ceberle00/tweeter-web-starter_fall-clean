@@ -1,7 +1,7 @@
+import { TokenRequest } from "./TokenRequest";
 
-export interface PagedUserItemRequest <T>
+export interface PagedUserItemRequest <T> extends TokenRequest
 {
-    readonly token : string,
     readonly userAlias : string,
     readonly pageSize : number,
     readonly lastItem: T | null

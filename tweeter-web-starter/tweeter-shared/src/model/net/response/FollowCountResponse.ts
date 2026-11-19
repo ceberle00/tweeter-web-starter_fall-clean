@@ -1,5 +1,5 @@
-import { Response } from "./Response";
+import { TweeterResponse } from "./TweeterResponse";
 
-export interface FollowCountResponse extends Response {
+export interface FollowCountResponse extends TweeterResponse {
     readonly followCount: number //works for followee and follower
 }

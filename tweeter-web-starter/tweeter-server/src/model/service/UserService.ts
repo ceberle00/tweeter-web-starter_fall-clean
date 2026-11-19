@@ -1,11 +1,11 @@
-import { AuthToken, User, FakeData } from "tweeter-shared";
+import { AuthToken, User, FakeData, UserDTO } from "tweeter-shared";
 import { Service } from "./Service";
 import { Buffer } from "buffer";
 
 export class UserService implements Service
 {
     public async getUser (
-        authToken: AuthToken,
+        authToken: string,
         alias: string
     ): Promise<User | null> {
         // TODO: Replace with the result of calling server
@@ -14,18 +14,12 @@ export class UserService implements Service
     public async login (
         alias: string,
         password: string
-    ): Promise<[User, AuthToken]> {
+    ): Promise<[UserDTO, string]> {
         // TODO: Replace with the result of calling the server
-        const user = FakeData.instance.firstUser;
-
-        if (user === null) {
-        throw new Error("Invalid alias or password");
-        }
-
-        return [user, FakeData.instance.authToken];
+        return this.authenticate(alias, password, "alias or password");
     };
 
-    public async logout (authToken: AuthToken): Promise<void>{
+    public async logout (authToken: string): Promise<void>{
         // Pause so we can see the logging out message. Delete when the call to the server is implemented.
         await new Promise((res) => setTimeout(res, 1000));
     };
@@ -34,20 +28,24 @@ export class UserService implements Service
         lastName: string,
         alias: string,
         password: string,
-        userImageBytes: Uint8Array,
+        userImageBytes: string,
         imageFileExtension: string
-    ): Promise<[User, AuthToken]> {
+    ): Promise<[UserDTO, string]> {
         // Not neded now, but will be needed when you make the request to the server in milestone 3
         const imageStringBase64: string =
         Buffer.from(userImageBytes).toString("base64");
 
         // TODO: Replace with the result of calling the server
+        return this.authenticate(alias, password, "registration");
+    };
+    private async authenticate(alias: string, password: string, message: string): Promise<[UserDTO, string]>
+    {
+        //passed in alias and password, not used now but will be eventually
         const user = FakeData.instance.firstUser;
-
         if (user === null) {
-        throw new Error("Invalid registration");
+            throw new Error(`Invalid ${message}`);
         }
 
-        return [user, FakeData.instance.authToken];
-    };
+        return [user.DTO, FakeData.instance.authToken.token];
+    }
 }
