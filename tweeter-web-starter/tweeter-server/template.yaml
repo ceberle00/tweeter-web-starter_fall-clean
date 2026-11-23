@@ -47,10 +47,10 @@ Resources:
   # Web API
   #
 
-  tweeterApi:
+  tweeterAPI:
     Type: AWS::Serverless::Api
     Properties:
-      Name: tweeterApi
+      Name: tweeterAPI
       StageName: prod
       Cors:
         AllowMethods: "'GET,POST,PUT,DELETE'"
@@ -105,7 +105,7 @@ Resources:
           # Endpoint definitions
           #
 
-          /followee:  ##### TODO: Change "/user/get" to the actual endpoint URL
+          /followee/list:  ##### TODO: Change "/user/get" to the actual endpoint URL
             post:
               consumes: *commonConsumes
               produces: *commonProduces
@@ -119,7 +119,7 @@ Resources:
                 requestTemplates: *commonRequestTemplates
                 responses: *commonAmazonResponses
               responses: *commonSwaggerResponses
-          /follower:  ##### TODO: Change "/user/get" to the actual endpoint URL
+          /follower/list:  ##### TODO: Change "/user/get" to the actual endpoint URL
             post:
               consumes: *commonConsumes
               produces: *commonProduces
@@ -165,7 +165,7 @@ Resources:
                 requestTemplates: *commonRequestTemplates
                 responses: *commonAmazonResponses
               responses: *commonSwaggerResponses
-          /checkFollowStatus:  ##### TODO: Change "/user/get" to the actual endpoint URL
+          /follow/status:  ##### TODO: Change "/user/get" to the actual endpoint URL
             post:
               consumes: *commonConsumes
               produces: *commonProduces
@@ -179,7 +179,7 @@ Resources:
                 requestTemplates: *commonRequestTemplates
                 responses: *commonAmazonResponses
               responses: *commonSwaggerResponses
-          /getFolloweeCount:  ##### TODO: Change "/user/get" to the actual endpoint URL
+          /followee/count:  ##### TODO: Change "/user/get" to the actual endpoint URL
             post:
               consumes: *commonConsumes
               produces: *commonProduces
@@ -193,7 +193,7 @@ Resources:
                 requestTemplates: *commonRequestTemplates
                 responses: *commonAmazonResponses
               responses: *commonSwaggerResponses
-          /getFollowerCount:  ##### TODO: Change "/user/get" to the actual endpoint URL
+          /follower/count:  ##### TODO: Change "/user/get" to the actual endpoint URL
             post:
               consumes: *commonConsumes
               produces: *commonProduces
@@ -207,7 +207,7 @@ Resources:
                 requestTemplates: *commonRequestTemplates
                 responses: *commonAmazonResponses
               responses: *commonSwaggerResponses
-          /getFeedItems:  ##### TODO: Change "/user/get" to the actual endpoint URL
+          /feed:  ##### TODO: Change "/user/get" to the actual endpoint URL
             post:
               consumes: *commonConsumes
               produces: *commonProduces
@@ -221,7 +221,7 @@ Resources:
                 requestTemplates: *commonRequestTemplates
                 responses: *commonAmazonResponses
               responses: *commonSwaggerResponses
-          /getStoryItems:  ##### TODO: Change "/user/get" to the actual endpoint URL
+          /story:  ##### TODO: Change "/user/get" to the actual endpoint URL
             post:
               consumes: *commonConsumes
               produces: *commonProduces
@@ -235,7 +235,7 @@ Resources:
                 requestTemplates: *commonRequestTemplates
                 responses: *commonAmazonResponses
               responses: *commonSwaggerResponses
-          /postStatus:  ##### TODO: Change "/user/get" to the actual endpoint URL
+          /status:  ##### TODO: Change "/user/get" to the actual endpoint URL
             post:
               consumes: *commonConsumes
               produces: *commonProduces
@@ -249,7 +249,7 @@ Resources:
                 requestTemplates: *commonRequestTemplates
                 responses: *commonAmazonResponses
               responses: *commonSwaggerResponses
-          /getUser:  ##### TODO: Change "/user/get" to the actual endpoint URL
+          /user:  ##### TODO: Change "/user/get" to the actual endpoint URL
             post:
               consumes: *commonConsumes
               produces: *commonProduces
@@ -347,10 +347,10 @@ Resources:
         PostApi:
           Type: Api
           Properties:
-            RestApiId: !Ref tweeterApi
+            RestApiId: !Ref tweeterAPI
             ##### TODO: Modify the Path property to the actual endpoint URL.
             ##### It must match the URL in the "Endpoint definitions" section above.
-            Path: /followee
+            Path: /followee/list
             Method: POST
   getFollowersFunction:
     Type: AWS::Serverless::Function
@@ -364,10 +364,10 @@ Resources:
         PostApi:
           Type: Api
           Properties:
-            RestApiId: !Ref tweeterApi
+            RestApiId: !Ref tweeterAPI
             ##### TODO: Modify the Path property to the actual endpoint URL.
             ##### It must match the URL in the "Endpoint definitions" section above.
-            Path: /follower
+            Path: /follower/list
             Method: POST
   unfollowFunction:
     Type: AWS::Serverless::Function
@@ -381,7 +381,7 @@ Resources:
         PostApi:
           Type: Api
           Properties:
-            RestApiId: !Ref tweeterApi
+            RestApiId: !Ref tweeterAPI
             ##### TODO: Modify the Path property to the actual endpoint URL.
             ##### It must match the URL in the "Endpoint definitions" section above.
             Path: /unfollow
@@ -398,7 +398,7 @@ Resources:
         PostApi:
           Type: Api
           Properties:
-            RestApiId: !Ref tweeterApi
+            RestApiId: !Ref tweeterAPI
             ##### TODO: Modify the Path property to the actual endpoint URL.
             ##### It must match the URL in the "Endpoint definitions" section above.
             Path: /follow
@@ -415,7 +415,7 @@ Resources:
         PostApi:
           Type: Api
           Properties:
-            RestApiId: !Ref tweeterApi
+            RestApiId: !Ref tweeterAPI
             ##### TODO: Modify the Path property to the actual endpoint URL.
             ##### It must match the URL in the "Endpoint definitions" section above.
             Path: /follower/count
@@ -432,7 +432,7 @@ Resources:
         PostApi:
           Type: Api
           Properties:
-            RestApiId: !Ref tweeterApi
+            RestApiId: !Ref tweeterAPI
             ##### TODO: Modify the Path property to the actual endpoint URL.
             ##### It must match the URL in the "Endpoint definitions" section above.
             Path: /followee/count
@@ -449,7 +449,7 @@ Resources:
         PostApi:
           Type: Api
           Properties:
-            RestApiId: !Ref tweeterApi
+            RestApiId: !Ref tweeterAPI
             ##### TODO: Modify the Path property to the actual endpoint URL.
             ##### It must match the URL in the "Endpoint definitions" section above.
             Path: /follow/status
@@ -460,13 +460,13 @@ Resources:
       ##### TODO: Change "userGetFunction" to the actual function name.
       FunctionName: getFeedItemsFunction
       ##### TODO: Modify Handler property to match your code. This identifies the exact function that the lambda should run.
-      Handler: lambda/feed/GetFeedItemsLambda.handler
+      Handler: lambda/status/GetFeedItemsLambda.handler
       Policies: *commonPolicies
       Events:
         PostApi:
           Type: Api
           Properties:
-            RestApiId: !Ref tweeterApi
+            RestApiId: !Ref tweeterAPI
             ##### TODO: Modify the Path property to the actual endpoint URL.
             ##### It must match the URL in the "Endpoint definitions" section above.
             Path: /feed
@@ -477,13 +477,13 @@ Resources:
       ##### TODO: Change "userGetFunction" to the actual function name.
       FunctionName: getStoryItemsFunction
       ##### TODO: Modify Handler property to match your code. This identifies the exact function that the lambda should run.
-      Handler: lambda/feed/GetStoryItemsLambda.handler
+      Handler: lambda/status/GetStoryItemsLambda.handler
       Policies: *commonPolicies
       Events:
         PostApi:
           Type: Api
           Properties:
-            RestApiId: !Ref tweeterApi
+            RestApiId: !Ref tweeterAPI
             ##### TODO: Modify the Path property to the actual endpoint URL.
             ##### It must match the URL in the "Endpoint definitions" section above.
             Path: /story
@@ -494,13 +494,13 @@ Resources:
       ##### TODO: Change "userGetFunction" to the actual function name.
       FunctionName: postStatusFunction
       ##### TODO: Modify Handler property to match your code. This identifies the exact function that the lambda should run.
-      Handler: lambda/feed/PostStatusLambda.handler
+      Handler: lambda/status/PostStatusLambda.handler
       Policies: *commonPolicies
       Events:
         PostApi:
           Type: Api
           Properties:
-            RestApiId: !Ref tweeterApi
+            RestApiId: !Ref tweeterAPI
             ##### TODO: Modify the Path property to the actual endpoint URL.
             ##### It must match the URL in the "Endpoint definitions" section above.
             Path: /status
@@ -511,13 +511,13 @@ Resources:
       ##### TODO: Change "userGetFunction" to the actual function name.
       FunctionName: getUserFunction
       ##### TODO: Modify Handler property to match your code. This identifies the exact function that the lambda should run.
-      Handler: lambda/feed/GetUserLambda.handler
+      Handler: lambda/user/GetUserLambda.handler
       Policies: *commonPolicies
       Events:
         PostApi:
           Type: Api
           Properties:
-            RestApiId: !Ref tweeterApi
+            RestApiId: !Ref tweeterAPI
             ##### TODO: Modify the Path property to the actual endpoint URL.
             ##### It must match the URL in the "Endpoint definitions" section above.
             Path: /user
@@ -528,13 +528,13 @@ Resources:
       ##### TODO: Change "userGetFunction" to the actual function name.
       FunctionName: loginFunction
       ##### TODO: Modify Handler property to match your code. This identifies the exact function that the lambda should run.
-      Handler: lambda/feed/LoginLambda.handler
+      Handler: lambda/user/LoginLambda.handler
       Policies: *commonPolicies
       Events:
         PostApi:
           Type: Api
           Properties:
-            RestApiId: !Ref tweeterApi
+            RestApiId: !Ref tweeterAPI
             ##### TODO: Modify the Path property to the actual endpoint URL.
             ##### It must match the URL in the "Endpoint definitions" section above.
             Path: /login
@@ -545,13 +545,13 @@ Resources:
       ##### TODO: Change "userGetFunction" to the actual function name.
       FunctionName: registerFunction
       ##### TODO: Modify Handler property to match your code. This identifies the exact function that the lambda should run.
-      Handler: lambda/feed/RegisterLambda.handler
+      Handler: lambda/user/RegisterLambda.handler
       Policies: *commonPolicies
       Events:
         PostApi:
           Type: Api
           Properties:
-            RestApiId: !Ref tweeterApi
+            RestApiId: !Ref tweeterAPI
             ##### TODO: Modify the Path property to the actual endpoint URL.
             ##### It must match the URL in the "Endpoint definitions" section above.
             Path: /register
@@ -562,13 +562,13 @@ Resources:
       ##### TODO: Change "userGetFunction" to the actual function name.
       FunctionName: logoutFunction
       ##### TODO: Modify Handler property to match your code. This identifies the exact function that the lambda should run.
-      Handler: lambda/feed/LogoutLambda.handler
+      Handler: lambda/user/LogoutLambda.handler
       Policies: *commonPolicies
       Events:
         PostApi:
           Type: Api
           Properties:
-            RestApiId: !Ref tweeterApi
+            RestApiId: !Ref tweeterAPI
             ##### TODO: Modify the Path property to the actual endpoint URL.
             ##### It must match the URL in the "Endpoint definitions" section above.
             Path: /logout

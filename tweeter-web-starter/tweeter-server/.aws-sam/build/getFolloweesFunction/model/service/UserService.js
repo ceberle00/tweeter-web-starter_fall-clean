@@ -11,11 +11,7 @@ class UserService {
     ;
     async login(alias, password) {
         // TODO: Replace with the result of calling the server
-        const user = tweeter_shared_1.FakeData.instance.firstUser;
-        if (user === null) {
-            throw new Error("Invalid alias or password");
-        }
-        return [user, tweeter_shared_1.FakeData.instance.authToken];
+        return this.authenticate(alias, password, "alias or password");
     }
     ;
     async logout(authToken) {
@@ -27,12 +23,16 @@ class UserService {
         // Not neded now, but will be needed when you make the request to the server in milestone 3
         const imageStringBase64 = buffer_1.Buffer.from(userImageBytes).toString("base64");
         // TODO: Replace with the result of calling the server
-        const user = tweeter_shared_1.FakeData.instance.firstUser;
-        if (user === null) {
-            throw new Error("Invalid registration");
-        }
-        return [user, tweeter_shared_1.FakeData.instance.authToken];
+        return this.authenticate(alias, password, "registration");
     }
     ;
+    async authenticate(alias, password, message) {
+        //passed in alias and password, not used now but will be eventually
+        const user = tweeter_shared_1.FakeData.instance.firstUser;
+        if (user === null) {
+            throw new Error(`Invalid ${message}`);
+        }
+        return [user.DTO, tweeter_shared_1.FakeData.instance.authToken.token];
+    }
 }
 exports.UserService = UserService;

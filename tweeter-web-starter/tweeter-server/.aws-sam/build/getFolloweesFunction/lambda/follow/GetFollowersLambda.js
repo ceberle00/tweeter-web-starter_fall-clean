@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GetFollowersLambda = void 0;
+exports.handler = void 0;
 const FollowService_1 = require("../../model/service/FollowService");
-const GetFollowersLambda = async (request) => {
+const handler = async (request) => {
     const followService = new FollowService_1.FollowService();
     const [items, hasMore] = await followService.loadMoreFollowers(request.token, request.userAlias, request.pageSize, request.lastItem);
     return {
@@ -12,4 +12,4 @@ const GetFollowersLambda = async (request) => {
         hasMore: hasMore
     };
 };
-exports.GetFollowersLambda = GetFollowersLambda;
+exports.handler = handler;
