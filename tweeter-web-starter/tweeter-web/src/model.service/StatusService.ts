@@ -29,14 +29,12 @@ export class StatusService implements Service
         lastItem: Status | null
     ): Promise<[Status[], boolean]> {
         // TODO: Replace with the result of calling server
-        console.log("3. StatusService userAlias:", userAlias);
         const request : PagedUserItemRequest<StatusDTO> = {
             token: authToken.token,
             userAlias : userAlias,
             pageSize : pageSize,
             lastItem : lastItem ? lastItem.DTO : null
         };
-        console.log("3. StatusService request:", request);
         return this.service.getMoreFeedItems(request);
     };
 
