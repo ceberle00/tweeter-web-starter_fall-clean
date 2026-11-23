@@ -6,6 +6,10 @@ import {
     FollowRequests,
     PagedUserItemRequest,
     PagedUserItemResponse,
+    PostStatusRequest,
+    Status,
+    StatusDTO,
+    TweeterResponse,
     User,
     UserDTO,
 } from "tweeter-shared";
@@ -16,6 +20,8 @@ export class ServerFacade {
 
     private clientCommunicator = new ClientCommunicator(this.SERVER_URL);
 
+
+    //FOLLOW FUNCTIONS
     public async getMoreFollowees(
         request: PagedUserItemRequest<UserDTO>,
     ): Promise<[User[], boolean]> {
@@ -158,4 +164,66 @@ export class ServerFacade {
         }
         return [followers, followees];
     }
+
+    //STATUS FUNCTIONS
+    public async getMoreStories(
+        request: PagedUserItemRequest<StatusDTO>
+    ): Promise<[Status[], boolean]> {
+        const response = await this.clientCommunicator.doPost<
+        PagedUserItemRequest<StatusDTO>,
+        PagedUserItemResponse<StatusDTO>
+        >(request, "/story");
+        const items: Status[] | null =
+        response.success && response.items
+            ? response.items.map((dto) => Status.fromDTO(dto) as Status)
+            : null;
+
+        if (response.success) {
+            if (items == null) {
+                throw new Error(`No stories found`);
+            } else {
+                return [items, response.hasMore];
+            }
+        } else {
+            console.error(response);
+            throw new Error(response.message ?? undefined);
+        }
+    }
+    public async getMoreFeedItems(
+        request: PagedUserItemRequest<StatusDTO>
+    ): Promise<[Status[], boolean]> {
+        const response = await this.clientCommunicator.doPost<
+        PagedUserItemRequest<StatusDTO>,
+        PagedUserItemResponse<StatusDTO>
+        >(request, "/feed");
+        const items: Status[] | null =
+        response.success && response.items
+            ? response.items.map((dto) => Status.fromDTO(dto) as Status)
+            : null;
+
+        if (response.success) {
+            if (items == null) {
+                throw new Error(`No feed items found`);
+            } else {
+                return [items, response.hasMore];
+            }
+        } else {
+            console.error(response);
+            throw new Error(response.message ?? undefined);
+        }
+    }
+    public async postStatus(
+        request: PostStatusRequest
+    ): Promise<void> {
+        const response = await this.clientCommunicator.doPost<
+            PostStatusRequest,
+            TweeterResponse
+        >(request, "/status");
+
+        if (!response.success) {
+            console.error(response);
+            throw new Error(response.message ?? undefined);
+        }
+    }
+    
 }
