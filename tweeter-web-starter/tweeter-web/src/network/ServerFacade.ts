@@ -4,6 +4,8 @@ import {
     CheckIfFollowResponse,
     FollowCountResponse,
     FollowRequests,
+    GetUserRequest,
+    GetUserResponse,
     PagedUserItemRequest,
     PagedUserItemResponse,
     PostStatusRequest,
@@ -192,6 +194,8 @@ export class ServerFacade {
     public async getMoreFeedItems(
         request: PagedUserItemRequest<StatusDTO>
     ): Promise<[Status[], boolean]> {
+        console.log("4. ServerFacade request:", request);
+        console.log("4. ServerFacade userAlias:", request.userAlias);
         const response = await this.clientCommunicator.doPost<
         PagedUserItemRequest<StatusDTO>,
         PagedUserItemResponse<StatusDTO>
@@ -200,7 +204,11 @@ export class ServerFacade {
         response.success && response.items
             ? response.items.map((dto) => Status.fromDTO(dto) as Status)
             : null;
-
+        console.log("Converted statuses:", items);
+        console.log("First status:", items?.[0]);
+        console.log("First status user:", items?.[0]?.user);
+        console.log("First status user alias:", items?.[0]?.user?.alias);
+        
         if (response.success) {
             if (items == null) {
                 throw new Error(`No feed items found`);
@@ -225,5 +233,26 @@ export class ServerFacade {
             throw new Error(response.message ?? undefined);
         }
     }
-    
+
+    //USER FUNCTIONS
+    public async getUser(
+        request: GetUserRequest
+    ): Promise<User | null> {
+        const response = await this.clientCommunicator.doPost<
+            GetUserRequest,
+            GetUserResponse
+        >(request, "/user");
+        const user: User | null =
+        response.success && response.user
+            ? User.fromDTO(response.user) as User
+            : null;
+        console.log("Raw getUser response:", response);
+        console.log("Returned user DTO:", response.user);
+        if (!response.success) {
+            console.error(response);
+            throw new Error(response.message ?? undefined);
+        } else {
+            return user;
+        }
+    }
 }

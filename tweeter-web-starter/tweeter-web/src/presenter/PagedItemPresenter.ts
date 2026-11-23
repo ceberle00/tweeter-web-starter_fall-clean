@@ -43,10 +43,12 @@ export abstract class PagedItemPresenter<T, S extends Service> extends Presenter
         alias: string
     ): Promise<User | null> {
         // TODO: Replace with the result of calling server
+        console.log("Alias being passed to getUser:", alias);
         return await this._userService.getUser(authToken, alias);
     };
     public async loadMoreItems (authToken : AuthToken, userAlias : string)
     {
+        console.log("2. PagedItemPresenter userAlias:", userAlias);
         await this.doFailureReportingOperation(async () => {
             const [newItems, hasMore] = await this.getMoreItems(authToken, userAlias)
             this._hasMoreItems = hasMore;

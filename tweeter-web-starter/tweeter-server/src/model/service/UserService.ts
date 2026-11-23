@@ -7,9 +7,10 @@ export class UserService implements Service
     public async getUser (
         authToken: string,
         alias: string
-    ): Promise<User | null> {
+    ): Promise<UserDTO | null> {
         // TODO: Replace with the result of calling server
-        return FakeData.instance.findUserByAlias(alias);
+        const user = FakeData.instance.findUserByAlias(alias);
+        return user === null ? null : user.DTO
     };
     public async login (
         alias: string,

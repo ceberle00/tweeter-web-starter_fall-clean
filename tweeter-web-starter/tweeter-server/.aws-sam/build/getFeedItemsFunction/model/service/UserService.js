@@ -6,7 +6,8 @@ const buffer_1 = require("buffer");
 class UserService {
     async getUser(authToken, alias) {
         // TODO: Replace with the result of calling server
-        return tweeter_shared_1.FakeData.instance.findUserByAlias(alias);
+        const user = tweeter_shared_1.FakeData.instance.findUserByAlias(alias);
+        return user === null ? null : user.DTO;
     }
     ;
     async login(alias, password) {

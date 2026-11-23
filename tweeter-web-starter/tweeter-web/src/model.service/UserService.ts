@@ -1,15 +1,22 @@
-import { AuthToken, User, FakeData } from "tweeter-shared";
+import { AuthToken, User, FakeData, GetUserRequest } from "tweeter-shared";
 import { Service } from "./Service";
 import { Buffer } from "buffer";
+import { ServerFacade } from "../network/ServerFacade";
 
 export class UserService implements Service
 {
+    private service = new ServerFacade();
+    
     public async getUser (
         authToken: AuthToken,
         alias: string
     ): Promise<User | null> {
-        // TODO: Replace with the result of calling server
-        return FakeData.instance.findUserByAlias(alias);
+        const request : GetUserRequest = 
+        {
+            token: authToken.token,
+            userAlias: alias
+        }
+        return this.service.getUser(request);
     };
     public async login (
         alias: string,
