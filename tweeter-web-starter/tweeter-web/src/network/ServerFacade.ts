@@ -1,4 +1,6 @@
 import {
+    AuthenticationResponse,
+    AuthToken,
     ChangeFollowStatusResponse,
     CheckIfFollowRequest,
     CheckIfFollowResponse,
@@ -6,16 +8,20 @@ import {
     FollowRequests,
     GetUserRequest,
     GetUserResponse,
+    LoginRequest,
     PagedUserItemRequest,
     PagedUserItemResponse,
     PostStatusRequest,
+    RegisterRequest,
     Status,
     StatusDTO,
+    TweeterRequest,
     TweeterResponse,
     User,
     UserDTO,
 } from "tweeter-shared";
 import { ClientCommunicator } from "./ClientCommunicator";
+import { TokenRequest } from "tweeter-shared/dist/model/net/request/TokenRequest";
 
 export class ServerFacade {
     private SERVER_URL = "https://dl542elx01.execute-api.us-east-2.amazonaws.com/dev";
@@ -194,8 +200,6 @@ export class ServerFacade {
     public async getMoreFeedItems(
         request: PagedUserItemRequest<StatusDTO>
     ): Promise<[Status[], boolean]> {
-        console.log("4. ServerFacade request:", request);
-        console.log("4. ServerFacade userAlias:", request.userAlias);
         const response = await this.clientCommunicator.doPost<
         PagedUserItemRequest<StatusDTO>,
         PagedUserItemResponse<StatusDTO>
@@ -204,10 +208,6 @@ export class ServerFacade {
         response.success && response.items
             ? response.items.map((dto) => Status.fromDTO(dto) as Status)
             : null;
-        console.log("Converted statuses:", items);
-        console.log("First status:", items?.[0]);
-        console.log("First status user:", items?.[0]?.user);
-        console.log("First status user alias:", items?.[0]?.user?.alias);
         
         if (response.success) {
             if (items == null) {
@@ -246,13 +246,64 @@ export class ServerFacade {
         response.success && response.user
             ? User.fromDTO(response.user) as User
             : null;
-        console.log("Raw getUser response:", response);
-        console.log("Returned user DTO:", response.user);
         if (!response.success) {
             console.error(response);
             throw new Error(response.message ?? undefined);
         } else {
             return user;
+        }
+    }
+    public async login(
+        request: LoginRequest
+    ): Promise<[User, AuthToken]> {
+        const response = await this.clientCommunicator.doPost<
+            LoginRequest,
+            AuthenticationResponse
+        >(request, "/login")
+        if (!response.success) {
+            console.error(response);
+            throw new Error(response.message ?? "Login failed");
+        }
+
+        if (!response.user || !response.authToken) {
+            throw new Error("Missing user or auth token");
+        }
+        const user = User.fromDTO(response.user) as User;
+        const auth = new AuthToken(response.authToken, Date.now());
+        return [user, auth];
+    }
+    public async register(
+        request: RegisterRequest
+    ) : Promise<[User, AuthToken]>
+    {
+        const response = await this.clientCommunicator.doPost<
+            RegisterRequest,
+            AuthenticationResponse
+        >(request, "/register")
+        if (!response.success) {
+            console.error(response);
+            throw new Error(response.message ?? "Register failed");
+        }
+
+        if (!response.user || !response.authToken) {
+            throw new Error("Missing user or auth token");
+        }
+        const user = User.fromDTO(response.user) as User;
+        const auth = new AuthToken(response.authToken, Date.now());
+
+        return [user, auth];
+    }
+    public async logout(
+        request: TokenRequest
+    ): Promise<void> {
+        const response = await this.clientCommunicator.doPost<
+        TokenRequest,
+        TweeterResponse
+        >(request, "/logout");
+
+        if (!response.success) {
+            console.error(response);
+            throw new Error(response.message ?? "Logout Failed");
         }
     }
 }

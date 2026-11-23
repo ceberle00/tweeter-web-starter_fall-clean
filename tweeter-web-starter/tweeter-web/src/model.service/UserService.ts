@@ -1,7 +1,8 @@
-import { AuthToken, User, FakeData, GetUserRequest } from "tweeter-shared";
+import { AuthToken, User, FakeData, GetUserRequest, LoginRequest, RegisterRequest } from "tweeter-shared";
 import { Service } from "./Service";
 import { Buffer } from "buffer";
 import { ServerFacade } from "../network/ServerFacade";
+import { TokenRequest } from "tweeter-shared/dist/model/net/request/TokenRequest";
 
 export class UserService implements Service
 {
@@ -23,18 +24,21 @@ export class UserService implements Service
         password: string
     ): Promise<[User, AuthToken]> {
         // TODO: Replace with the result of calling the server
-        const user = FakeData.instance.firstUser;
-
-        if (user === null) {
-        throw new Error("Invalid alias or password");
+        const request : LoginRequest = {
+            userAlias: alias,
+            password: password
         }
-
-        return [user, FakeData.instance.authToken];
+        return this.service.login(request);
     };
 
-    public async logout (authToken: AuthToken): Promise<void>{
-        // Pause so we can see the logging out message. Delete when the call to the server is implemented.
+    public async logout (authToken: AuthToken): Promise<void>
+    {
         await new Promise((res) => setTimeout(res, 1000));
+        const request : TokenRequest = {
+            token: authToken.token
+        }
+        this.service.logout(request);
+        // Pause so we can see the logging out message. Delete when the call to the server is implemented.
     };
     public async register (
         firstName: string,
@@ -48,13 +52,14 @@ export class UserService implements Service
         const imageStringBase64: string =
         Buffer.from(userImageBytes).toString("base64");
 
-        // TODO: Replace with the result of calling the server
-        const user = FakeData.instance.firstUser;
-
-        if (user === null) {
-        throw new Error("Invalid registration");
+        const request : RegisterRequest = {
+            firstName: firstName,
+            lastName: lastName,
+            userAlias: alias,
+            password: password,
+            userImageBytes: imageStringBase64,
+            imageFileExtension: imageFileExtension
         }
-
-        return [user, FakeData.instance.authToken];
+        return this.service.register(request);
     };
 }
