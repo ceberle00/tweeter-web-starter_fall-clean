@@ -2,6 +2,7 @@ import { StatusService } from "../../src/model.service/StatusService";
 import { AuthToken, User, Status } from "tweeter-shared";
 import "isomorphic-fetch";
 
+// AI-assisted code: See AI-ATTRIBUTION.md for details.
 describe("StatusService", () => {
     const service = new StatusService();
 
